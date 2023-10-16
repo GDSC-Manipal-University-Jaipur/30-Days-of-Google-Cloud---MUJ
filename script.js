@@ -1,7 +1,6 @@
-// Function to read and process CSV file, skip specific columns, and sort by the first column
+// Function to read and process CSV file while skipping specific columns and sorting by the first column
 function readCSV() {
     const table = document.getElementById("data-table");
-    let headerSet = false;
 
     fetch("data.csv")
         .then((response) => response.text())
@@ -14,14 +13,15 @@ function readCSV() {
                 const newRow = rowIndex === 0 ? table.createTHead().insertRow() : table.insertRow();
 
                 cells.forEach((cell, index) => {
-                    // Skip columns 2, 3, 4, and 6 (indices 1, 2, 3, and 5) in the table headers
-                    if (rowIndex === 0 && ![1, 2, 3, 5].includes(index)) {
-                        const th = document.createElement("th");
-                        th.textContent = cell;
-                        newRow.appendChild(th);
-                    } else if (rowIndex > 0) {
-                        // Skip columns 2, 3, 4, and 6 (indices 1, 2, 3, and 5) in the table data
-                        if (![1, 2, 3, 5].includes(index)) {
+                    if (rowIndex === 0) {
+                        // Skip columns 2, 3, and 5 (indices 1, 2, and 4) in the table header
+                        if (![1, 2, 4].includes(index)) {
+                            const th = document.createElement("th");
+                            th.textContent = cell;
+                            newRow.appendChild(th);
+                        }
+                    } else {
+                        if (![1, 2, 4].includes(index)) {
                             const newCell = newRow.insertCell();
                             newCell.textContent = cell;
                         }
@@ -49,6 +49,8 @@ function readCSV() {
 
 // Call the function to read and process the CSV file
 readCSV();
+
+
 
 // Function to search and filter the table based on user input in column 1
 function searchTable() {
